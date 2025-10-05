@@ -1,0 +1,222 @@
+local Translations = {
+    ["Main"] = "主要",
+    ["Other"] = "其他",
+    ["Misc"] = "杂项",
+    ["Visuals"] = "视觉效果",
+    ["UI Settings"] = "界面设置",
+    ["Infinite Stamina"] = "无限体力",
+    ["Enable Infinite Stamina"] = "启用无限体力",
+    ["Autowin"] = "自动获胜",
+    ["Auto Complete Flow Game"] = "自动完成流程游戏",
+    ["discord.gg/voidware"] = "汉化作者:Xnn",
+    ["Kill Aura"] = "击杀光环",
+    ["Kill Aura Range"] = "击杀光环范围",
+    ["Automation"] = "自动化",
+    ["Auto Fix Generators"] = "自动修复发电机",
+    ["Anti Death"] = "反死亡",
+    ["Voidware - Forsaken"] = "虚空 - 被遗弃",
+    ["Toggle"] = "开关",
+    ["Lock"] = "锁定",
+    ["Unlock"] = "解锁",
+    ["Full Bright"] = "全亮",
+    ["Full Bright Loop"] = "全亮循环",
+    ["Player Attach"] = "玩家附着",
+    ["Attach Range"] = "附着范围",
+    ["Movement Type"] = "移动类型",
+    ["Teleport"] = "传送",
+    ["Player"] = "玩家",
+    ["TP Walk Speed"] = "TP行走速度",
+    ["TP Walk"] = "TP行走",
+    ["Noclip"] = "穿墙",
+    ["Infinite Jump"] = "无限跳跃",
+    ["Information"] = "信息",
+    ["Welcome to Voidware!"] = "欢迎使用虚空脚本!",
+    ["Movement Type"] = "移动类型",
+    ["Tween Duration"] = "补间持续时间",
+    ["Stay Behind Target "] = "保持在目标后方",
+    ["Behind Distance"] = "后方距离",
+    ["Join Discord Server"] = "加入 Discord 服务器",
+    ["Unload"] = "卸载",
+    ["Library Choice"] = "库选择",
+    ["Save Settings"] = "保存设置",
+    ["Reset Settings"] = "重置设置",
+    ["Security"] = "安全",
+    ["Anti AFK"] = "防挂机",
+    ["Interaction"] = "交互",
+    ["Instant Interact"] = "即时交互",
+    ["Interaction Reach Multiplier"] = "交互范围倍率",
+    ["Interaction Reach"] = "交互范围",
+    ["Coordinates"] = "坐标",
+    ["Show Coordinates"] = "显示坐标",
+    ["Low GFX"] = "低gfx",
+    ["Main ESP"] = "主要ESP",
+    ["Player"] = "玩家",
+    ["Killer"] = "杀手",
+    ["Survivor"] = "幸存者",
+    ["Generator"] = "发电机",
+    ["Ignore Fixed Generators"] = "忽略已修复的发电机",
+    ["ESP Settings"] = "ESP设置",
+    ["Enable Highlight"] = "启用高亮",
+    ["Show Distance"] = "显示距离",
+    ["Fill Transparency"] = "填充透明度",
+    ["Outline Transparency"] = "轮廓透明度",
+    ["Text Size"] = "文本大小",
+    ["Items"] = "物品",
+    ["BloxyCola, MedKit"] = "BloxyCola, 医疗包",
+    ["Self"] = "自身",
+    ["FOV"] = "视野",
+    ["Ambient"] = "环境",
+    ["Rich Shader"] = "丰富着色器",
+    ["Lighting Theme"] = "光照主题",
+    ["Enable Lighting Theme"] = "启用光照主题",
+    ["Aesthetic Lighting"] = "美学光照",
+    ["Menu"] = "菜单",
+    ["Open Keybind Menu"] = "打开按键绑定菜单",
+    ["Custom Cursor"] = "自定义光标",
+    ["Menu bind"] = "菜单绑定",
+    ["RightShift"] = "右Shift键",
+    ["Credits"] = "致谢",
+    ["erchodev#0 - script dev"] = "erchodev#0 - 脚本开发",
+    ["linoria - ui library"] = "linoria - 用户界面库",
+    ["obsidian - ui library "] = "obsidian - 用户界面库",
+    ["Inf Yield "] = "无限收益",
+    ["Please notify me if you need credits (erchodev#0 on discord)"] = "如需添加致谢信息请通知我 (Discord: erchodev#0)",
+    ["Themes"] = "主题",
+    ["Background color"] = "背景颜色",
+    ["Main color"] = "主颜色",
+    ["Accent color"] = "强调色",
+    ["Outline color"] = "轮廓颜色",
+    ["Font color"] = "字体颜色",
+    ["Font Face"] = "字体样式",
+    ["Code"] = "代码",
+    ["Theme list"] = "主题列表",
+    ["Default"] = "默认",
+    ["Set as default"] = "设为默认",
+    ["Custom theme name"] = "自定义主题名称",
+    ["Create theme"] = "创建主题",
+    ["Custom themes"] = "自定义主题",
+    ["Load theme"] = "加载主题",
+    ["Overwrite theme"] = "覆盖主题",
+    ["Delete theme"] = "删除主题",
+    ["Set as default"] = "设为默认",
+    ["Reset default"] = "重置默认",
+    ["Config list"] = "配置列表",
+    ["Load config"] = "加载配置",
+    ["Overwrite config"] = "覆盖配置",
+    ["Delete config"] = "删除配置",
+    ["Refresh list"] = "刷新列表",
+    ["Set as autoload"] = "设为自动加载",
+    ["Reset autoload"] = "重置自动加载",
+}
+
+local function translateText(text)
+    if not text or type(text) ~= "string" then return text end
+    
+    if Translations[text] then
+        return Translations[text]
+    end
+    
+    for en, cn in pairs(Translations) do
+        if text:find(en) then
+            return text:gsub(en, cn)
+        end
+    end
+    
+    return text
+end
+
+local function setupTranslationEngine()
+    local success, err = pcall(function()
+        local oldIndex = getrawmetatable(game).__newindex
+        setreadonly(getrawmetatable(game), false)
+        
+        getrawmetatable(game).__newindex = newcclosure(function(t, k, v)
+            if (t:IsA("TextLabel") or t:IsA("TextButton") or t:IsA("TextBox")) and k == "Text" then
+                v = translateText(tostring(v))
+            end
+            return oldIndex(t, k, v)
+        end)
+        
+        setreadonly(getrawmetatable(game), true)
+    end)
+    
+    if not success then
+        warn("元表劫持失败:", err)
+       
+        local translated = {}
+        local function scanAndTranslate()
+            for _, gui in ipairs(game:GetService("CoreGui"):GetDescendants()) do
+                if (gui:IsA("TextLabel") or gui:IsA("TextButton") or gui:IsA("TextBox")) and not translated[gui] then
+                    pcall(function()
+                        local text = gui.Text
+                        if text and text ~= "" then
+                            local translatedText = translateText(text)
+                            if translatedText ~= text then
+                                gui.Text = translatedText
+                                translated[gui] = true
+                            end
+                        end
+                    end)
+                end
+            end
+            
+            local player = game:GetService("Players").LocalPlayer
+            if player and player:FindFirstChild("PlayerGui") then
+                for _, gui in ipairs(player.PlayerGui:GetDescendants()) do
+                    if (gui:IsA("TextLabel") or gui:IsA("TextButton") or gui:IsA("TextBox")) and not translated[gui] then
+                        pcall(function()
+                            local text = gui.Text
+                            if text and text ~= "" then
+                                local translatedText = translateText(text)
+                                if translatedText ~= text then
+                                    gui.Text = translatedText
+                                    translated[gui] = true
+                                end
+                            end
+                        end)
+                    end
+                end
+            end
+        end
+        
+        local function setupDescendantListener(parent)
+            parent.DescendantAdded:Connect(function(descendant)
+                if descendant:IsA("TextLabel") or descendant:IsA("TextButton") or descendant:IsA("TextBox") then
+                    task.wait(0.1)
+                    pcall(function()
+                        local text = descendant.Text
+                        if text and text ~= "" then
+                            local translatedText = translateText(text)
+                            if translatedText ~= text then
+                                descendant.Text = translatedText
+                            end
+                        end
+                    end)
+                end
+            end)
+        end
+        
+        pcall(setupDescendantListener, game:GetService("CoreGui"))
+        local player = game:GetService("Players").LocalPlayer
+        if player and player:FindFirstChild("PlayerGui") then
+            pcall(setupDescendantListener, player.PlayerGui)
+        end
+        
+        while true do
+            scanAndTranslate()
+            task.wait(3)
+        end
+    end
+end
+
+task.wait(2)
+
+setupTranslationEngine()
+
+local success, err = pcall(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/forsaken.lua", true))()
+end)
+
+if not success then
+    warn("加载失败:", err)
+end
